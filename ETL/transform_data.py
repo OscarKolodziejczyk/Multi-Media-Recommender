@@ -1,10 +1,4 @@
-from extract_data import extract_data_from_azure
-import pandas as pd
-
-def clean_data():
-
-    # Collect our extracted dataframes dictionary
-    dfs = extract_data_from_azure()
+def clean_data(dfs):
 
     # New dictionary that will hold our transformed data
     cleaned_dfs = {}
