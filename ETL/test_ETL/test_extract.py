@@ -9,7 +9,7 @@ import pandas as pd
 from ETL.extract_data import extract_data_from_azure
 
 
-def test_env_vars():
+def test_azure_env_vars():
 
     load_dotenv()
 
@@ -18,6 +18,7 @@ def test_env_vars():
 
     assert AZURE_CONNECTION_STRING is not None
     assert CONTAINER_NAME is not None
+
     assert AZURE_CONNECTION_STRING != ""
     assert CONTAINER_NAME != ""
 
