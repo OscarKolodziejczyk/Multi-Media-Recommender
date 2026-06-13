@@ -10,6 +10,10 @@ AZURE_CONNECTION_STRING = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
 CONTAINER_NAME = os.getenv('AZURE_CONTAINER_NAME')
 
 def extract_data_from_azure():
+    """
+    Extracts raw data from Azure Data Lake
+    :return: Dictionary of DataFrames (where the DFs are the raw CSVs)
+    """
     print('Extracting data from Azure')
 
     # Instantiate blob client

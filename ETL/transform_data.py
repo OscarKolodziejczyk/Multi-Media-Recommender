@@ -1,4 +1,11 @@
 def clean_data(dfs):
+    """
+    Takes dfs (dictionary of raw data, and cleans it to only include necessary
+    columns)
+    :param dfs: Dictionary of DataFrames (from extract_data.py)
+    :return: Dictionary of DataFrames (Cleaned version, with only 3 cols; Title,
+             Description, and DataType)
+    """
 
     # New dictionary that will hold our transformed data
     cleaned_dfs = {}

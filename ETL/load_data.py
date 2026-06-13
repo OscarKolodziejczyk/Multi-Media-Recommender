@@ -2,6 +2,11 @@ import os
 from sqlalchemy import create_engine
 
 def load_data_to_postgres(cleaned_dfs):
+    """
+    Loads the cleaned data into PostgreSQL
+    :param cleaned_dfs: clean, transformed, dictionary of dataframes from
+           transform_data.py
+    """
     print("Now connecting to PostgreSQL...")
 
     # Get credentials from .env
