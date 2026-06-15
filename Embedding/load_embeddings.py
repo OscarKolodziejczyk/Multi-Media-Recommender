@@ -29,7 +29,7 @@ def update_postgres_with_embeddings(df, engine, table_name):
         # Prepare update statement, casting embedding input to a vector
         update_query = text(f"""
             UPDATE {table_name}
-            SET Embedding = :embedding::vector
+            SET Embedding = CAST(:Embedding AS vector)
             WHERE "Title" = :title;
             """)
 
@@ -37,7 +37,7 @@ def update_postgres_with_embeddings(df, engine, table_name):
         # This allows SQLAlchemy & PostgreSQL to use them correctly
         update_data = [
             {
-                "embedding": str(row["Embedding"]),
+                "Embedding": str(row["Embedding"]),
                 "title": row["Title"]
             }
             for index, row in df.iterrows()
@@ -45,4 +45,4 @@ def update_postgres_with_embeddings(df, engine, table_name):
 
         conn.execute(update_query, update_data)
 
-        print(f"Successfully updated {len(df)} embeddings for {table_name}")
+        print(f"Successfully updated {len(df)} Embeddings for {table_name}")
