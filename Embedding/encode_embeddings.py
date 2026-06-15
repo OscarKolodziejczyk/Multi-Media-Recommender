@@ -44,13 +44,13 @@ if __name__ == "__main__":
     result_df = generate_vectors(test_df)
 
     # 3. Inspect the resulting math
-    if result_df is not None and 'embedding' in result_df.columns:
+    if result_df is not None and 'Embedding' in result_df.columns:
         print("\n--- TEST SUCCESS ---")
         print(f"New Columns: {result_df.columns.tolist()}")
 
         # Isolate the first vector to prove it is a 384-dimensional array
         first_movie = result_df['Title'].iloc[0]
-        first_vector = result_df['embedding'].iloc[0]
+        first_vector = result_df['Embedding'].iloc[0]
 
         print(f"\nTarget: {first_movie}")
         print(f"Total Vector Dimensions: {len(first_vector)}")
