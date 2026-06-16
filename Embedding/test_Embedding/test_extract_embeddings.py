@@ -1,10 +1,7 @@
-import unittest
 import os
 import pandas as pd
-import pytest
 from unittest.mock import patch, MagicMock
 from dotenv import load_dotenv
-from pandas import DataFrame
 
 from Embedding.extract_embeddings import extract_text_for_embeddings
 
@@ -34,11 +31,15 @@ def test_postgres_env_vars():
 @patch('Embedding.extract_embeddings.create_engine')
 def test_database_read(mock_create_engine, mock_pd_read_sql):
 
+    # Create a fake database engine
     fake_engine = MagicMock()
     mock_create_engine.return_value = fake_engine
 
+    # This is the expected query within extract_text_for_embeddings, we are
+    # recreating it here for a later assertion
     query = "SELECT * FROM movies;"
 
+    # Fake DF for the mock_pd_read_sql call
     fake_df = pd.DataFrame({
             "Title": ["The Matrix"],
             "Description": ["Simulation action movie."],
@@ -49,7 +50,9 @@ def test_database_read(mock_create_engine, mock_pd_read_sql):
     # EXECUTE with mock data
     result_df, result_engine = extract_text_for_embeddings("movies")
 
+    # Assert our mock pd.read_sql was called with the correct arguments
     mock_pd_read_sql.assert_called_with(query, fake_engine)
 
+    # Asserting the resultant DF and engine are the same as our mocks
     assert result_df.equals(fake_df), "Result DataFrame does not match mock"
     assert result_engine is fake_engine, "Result Engine does not match mock"
