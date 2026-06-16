@@ -16,7 +16,7 @@ def update_postgres_with_embeddings(df, engine, table_name):
 
     print(f"Updating Embeddings for {table_name}...")
 
-    # Context Manager: ensures update to db is clean and won't corupt
+    # Context Manager: ensures update to db is clean and won't corrupt
     with engine.begin() as conn:
 
         # Adds an 'Embedding' column to the table if it doesn't exist
