@@ -1,9 +1,6 @@
 import os
 import unittest
-
-import ETL.load_data
 from ETL.load_data import load_data_to_postgres
-import pytest
 import pandas as pd
 from unittest.mock import patch, MagicMock
 from dotenv import load_dotenv

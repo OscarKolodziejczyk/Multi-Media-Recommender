@@ -3,7 +3,6 @@ import os
 from unittest.mock import patch, MagicMock
 
 import pytest
-from azure.storage.blob import BlobServiceClient
 from dotenv import load_dotenv
 import pandas as pd
 from ETL.extract_data import extract_data_from_azure
