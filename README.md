@@ -1,0 +1,134 @@
+# Overview
+
+This project is a multimedia recommendation engine designed to cross-reference
+and suggest movies, books, and video games based on deep semantic
+narrative similarities rather than basic genre tags.
+
+By leveraging Language Processing models and a highly optimized vector
+database, this system "understands" plot summaries of a requested piece of
+media and calculates cosine-similarity to find
+thematically similar stories across entertainment mediums.
+
+# The Architecture & Tech Stack
+
+This application is built using a modern, cloud-native engineering pipeline with
+strict separation of concerns across data ingestion, machine learning
+generation, and API deployment.
+
+Cloud Storage / Data Lake: Azure Blob Storage
+
+Database: PostgreSQL (Containerized via Docker)
+
+Vector Engine: pgvector extension for native SQL math operations
+
+Machine Learning: Hugging Face `all-MiniLM-L6-v2` (Local Execution)
+
+Data Processing Pipeline: Python, Pandas, SQLAlchemy
+
+Backend API: FastAPI (In Progress)
+
+Cloud Deployment: Docker & Azure Container Apps (In Progress)
+
+Unit Testing: pytest and unittest.mock
+
+# Development Phases
+
+## Part 1: Cloud Ingestion & Database Architecture (Completed)
+
+* Securely hosted the raw movie, game, and book CSVs (downloaded from Kaggle)
+in a cloud data lake using Azure Blob Storage.
+
+* Engineered a Python ETL pipeline utilizing the `azure-storage-blob` SDK to
+securely stream raw data into memory.
+
+* Cleaned and standardized the unstructured CSV data using Pandas.
+
+* Spun up a local PostgreSQL instance via Docker and utilized SQLAlchemy to
+automatically generate schema tables and bulk-insert the cleaned data.
+
+## Part 2: Vector Math & Machine Learning (Completed)
+
+* Activated the pgvector extension inside PostgreSQL to allow native storage of
+mathematical arrays.
+
+* Built an independent Machine Learning generation pipeline using
+sentence-transformers.
+
+* Downloaded and executed the open-source Hugging Face `all-MiniLM-L6-v2` model
+locally to convert English plot summaries into dense, 384-dimensional
+mathematical vectors.
+
+* Safely executed bulk UPDATE SQL transactions to cast and store the new Python
+arrays as native PostgreSQL vector data types.
+
+
+## Part 3: The Search Algorithm & FastAPI (In Progress)
+
+* Writing the native SQL queries to calculate Cosine Similarity between media
+vectors.
+
+* Wrapping the database logic into a high-performance, async REST API using
+FastAPI.
+
+## Part 4: Serverless Cloud Deployment (In Progress)
+
+* Containerizing the FastAPI application with a Dockerfile.
+
+* Deploying the container to Azure Container Apps to host the API live on the
+public internet.
+
+## Local Setup & Installation
+
+If you wish to run this repository locally, follow these steps:
+
+1. Clone the Repository
+```Bash
+git clone https://github.com/OscarKolodziejczyk/Multi-Media-Recommender.git
+cd Multi-Media-Recommender
+```
+2. Environment Variables
+   This project requires secure connection strings to run. Create a .env file in
+the root directory and populate it with the following structure:
+
+```
+# Azure Cloud Credentials
+
+AZURE_STORAGE_CONNECTION_STRING={your_azure_connection_string}
+AZURE_CONTAINER_NAME={your_azure_container_name}
+
+
+# Local PostgreSQL Credentials
+
+DB_USER={your_db_username}
+DB_PASSWORD={your_db_password}
+DB_HOST="localhost"
+DB_PORT="5432"
+DB_NAME="juneproject_db" 
+```
+3. Start up the Database
+   Ensure Docker is installed and running on your machine, then execute:
+
+```Bash
+docker-compose up -d
+```
+
+4. Install Python Dependencies
+   It is highly recommended to use a virtual environment.
+
+```Bash
+pip install pandas sqlalchemy psycopg2-binary azure-storage-blob
+sentence-transformers pgvector python-dotenv pytest
+```
+5. Execute the Pipelines
+   Run the independent pipelines in order to populate your database with semantic math:
+
+```Bash
+# 1. Pull data from Azure and load into Postgres
+python ETL/extract_data.py  
+
+# 2. Generate AI vectors and update database rows
+python Embedding/embedding_pipeline.py 
+
+# 3. Run the isolated test suite
+pytest
+```
