@@ -16,3 +16,6 @@ def execute_etl_pipeline():
 
     # 3. Load
     load_data_to_postgres(clean_dfs)
+
+if __name__ == "__main__":
+    execute_etl_pipeline()
