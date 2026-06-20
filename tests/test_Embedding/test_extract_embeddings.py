@@ -3,7 +3,7 @@ import pandas as pd
 from unittest.mock import patch, MagicMock
 from dotenv import load_dotenv
 
-from Embedding.extract_embeddings import extract_text_for_embeddings
+from src.Embedding.extract_embeddings import extract_text_for_embeddings
 
 
 def test_postgres_env_vars():
@@ -27,8 +27,8 @@ def test_postgres_env_vars():
     assert DB_PORT != ""
     assert DB_NAME != ""
 
-@patch('Embedding.extract_embeddings.pd.read_sql')
-@patch('Embedding.extract_embeddings.create_engine')
+@patch('src.Embedding.extract_embeddings.pd.read_sql')
+@patch('src.Embedding.extract_embeddings.create_engine')
 def test_database_read(mock_create_engine, mock_pd_read_sql):
 
     # Create a fake database engine

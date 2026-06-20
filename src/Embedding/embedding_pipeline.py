@@ -1,6 +1,6 @@
-from Embedding.extract_embeddings import extract_text_for_embeddings
-from Embedding.encode_embeddings import generate_vectors
-from Embedding.load_embeddings import update_postgres_with_embeddings
+from src.Embedding.extract_embeddings import extract_text_for_embeddings
+from src.Embedding.encode_embeddings import generate_vectors
+from src.Embedding.load_embeddings import update_postgres_with_embeddings
 
 
 def execute_embeddings_pipeline(table_names: list[str]):

@@ -2,9 +2,9 @@ import pandas as pd
 from unittest.mock import patch, MagicMock
 import numpy as np
 
-from Embedding.encode_embeddings import generate_vectors
+from src.Embedding.encode_embeddings import generate_vectors
 
-@patch('Embedding.encode_embeddings.SentenceTransformer')
+@patch('src.Embedding.encode_embeddings.SentenceTransformer')
 def test_generate_vectors_logic(mock_SentenceTransformer):
     # Fake dataframe to pass into generate_vectors
     fake_df = pd.DataFrame({

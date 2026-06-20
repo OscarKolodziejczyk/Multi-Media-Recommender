@@ -5,7 +5,7 @@ from unittest.mock import patch, MagicMock
 import pytest
 from dotenv import load_dotenv
 import pandas as pd
-from ETL.extract_data import extract_data_from_azure
+from src.ETL.extract_data import extract_data_from_azure
 
 
 def test_azure_env_vars():
@@ -21,7 +21,7 @@ def test_azure_env_vars():
     assert AZURE_CONNECTION_STRING != ""
     assert CONTAINER_NAME != ""
 
-@patch('ETL.extract_data.BlobServiceClient')
+@patch('src.ETL.extract_data.BlobServiceClient')
 def test_raw_files_in_dataframes(mock_blob_service_client):
 
     # Setup fake csv byte data
@@ -49,7 +49,7 @@ def test_raw_files_in_dataframes(mock_blob_service_client):
     assert isinstance(dfs["raw_movies.csv"], pd.DataFrame)
     assert dfs["raw_movies.csv"].iloc[0]['title'] == 'Fake Title'
 
-@patch('ETL.extract_data.AZURE_CONNECTION_STRING', "DefaultEndpointsProtocol=https;AccountName=bad;AccountKey=bad;EndpointSuffix=core.windows.net")
+@patch('src.ETL.extract_data.AZURE_CONNECTION_STRING', "DefaultEndpointsProtocol=https;AccountName=bad;AccountKey=bad;EndpointSuffix=core.windows.net")
 def test_bad_credentials():
     with pytest.raises(Exception):
         extract_data_from_azure()

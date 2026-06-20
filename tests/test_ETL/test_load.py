@@ -1,6 +1,6 @@
 import os
 import unittest
-from ETL.load_data import load_data_to_postgres
+from src.ETL.load_data import load_data_to_postgres
 import pandas as pd
 from unittest.mock import patch, MagicMock
 from dotenv import load_dotenv
@@ -27,7 +27,7 @@ def test_db_env_vars():
     assert DB_PORT != ""
     assert DB_NAME != ""
 
-@patch("ETL.load_data.create_engine")
+@patch("src.ETL.load_data.create_engine")
 @patch("pandas.DataFrame.to_sql")
 def test_load_data_to_postgres(mock_df_to_sql, mock_create_engine):
     fake_cleaned_dfs = {

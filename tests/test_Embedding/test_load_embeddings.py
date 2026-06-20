@@ -1,9 +1,7 @@
 import pandas as pd
-from unittest.mock import patch, MagicMock
-import numpy as np
-from sqlalchemy import text
+from unittest.mock import MagicMock
 
-from Embedding.load_embeddings import update_postgres_with_embeddings
+from src.Embedding.load_embeddings import update_postgres_with_embeddings
 
 def test_load_embeddings():
 
@@ -13,7 +11,7 @@ def test_load_embeddings():
         "Title": ["The Matrix"],
         "Description": ["Simulation action movie."],
         "DataType": ["Movie"],
-        "Embedding": [fake_vectors]
+        "embedding": [fake_vectors]
     })
     fake_engine = MagicMock()
     mock_conn = MagicMock()
@@ -24,7 +22,7 @@ def test_load_embeddings():
     # Expected update data
     expected_update_data = [
         {
-            "Embedding": str(fake_vectors),
+            "embedding": str(fake_vectors),
             "title": "The Matrix"
         }
     ]
