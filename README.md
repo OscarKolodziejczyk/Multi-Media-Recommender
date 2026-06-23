@@ -33,7 +33,7 @@ Unit Testing: pytest and unittest.mock
 
 # Development Phases
 
-## Part 1: Cloud Ingestion & Database Architecture (Completed)
+## Part 1: Cloud Ingestion & Database Architecture
 
 * Securely hosted the raw movie, game, and book CSVs (downloaded from Kaggle)
 in a cloud data lake using Azure Blob Storage.
@@ -46,7 +46,7 @@ securely stream raw data into memory.
 * Spun up a local PostgreSQL instance via Docker and utilized SQLAlchemy to
 automatically generate schema tables and bulk-insert the cleaned data.
 
-## Part 2: Vector Math & Machine Learning (Completed)
+## Part 2: Vector Math & Machine Learning  
 
 * Activated the pgvector extension inside PostgreSQL to allow native storage of
 mathematical arrays.
@@ -61,14 +61,13 @@ mathematical vectors.
 * Safely executed bulk UPDATE SQL transactions to cast and store the new Python
 arrays as native PostgreSQL vector data types.
 
+## Part 3: The Search Algorithm & FastAPI 
 
-## Part 3: The Search Algorithm & FastAPI (In Progress)
+* Engineered a cross-media UNION ALL SQL query utilizing CTEs and pgvector's native <=> operator to calculate Cosine Distance across three distinct tables simultaneously.
 
-* Writing the native SQL queries to calculate Cosine Similarity between media
-vectors.
+* Wrapped the complex database logic into a high-performance, asynchronous REST API using FastAPI.
 
-* Wrapping the database logic into a high-performance, async REST API using
-FastAPI.
+* Implemented SQLAlchemy parameterization (using the text() function) to securely prevent SQL injections.
 
 ## Part 4: Serverless Cloud Deployment (In Progress)
 
