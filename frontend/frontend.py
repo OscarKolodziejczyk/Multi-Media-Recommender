@@ -34,9 +34,13 @@ user_query = st.selectbox(
 
 if st.button("Get Recommendations"):
     if user_query:
+        # Have to strip the data type into our input...
+        user_query = user_query[:-7]
+        if user_query[-1] == " ":
+            user_query = user_query[:-1]
         with st.spinner(f"Calculating recommendations for {user_query}..."):
             try:
-                response = requests.post(f"{API_BASE_URL}/recommend/{user_query}", json={"query": user_query})
+                response = requests.get(f"{API_BASE_URL}/recommend/{user_query}", json={"query": user_query})
 
                 if response.status_code == 200:
                     results = response.json()
@@ -49,17 +53,26 @@ if st.button("Get Recommendations"):
                     with col1:
                         st.subheader("🎬 Movies 🎬")
                         for movie in results.get("movies", []):
-                            st.write(f"- {movie['title']}")
+                            st.markdown(f"**{movie['Title']}**")
+                            with st.expander(f"View Description"):
+                                st.caption(movie['Description'])
+                            st.write("---")
 
                     with col2:
                         st.subheader("📚 Books 📚")
                         for book in results.get("books", []):
-                            st.write(f"- {book['title']}")
+                            st.markdown(f"**{book['Title']}**")
+                            with st.expander(f"View Description"):
+                                st.caption(book['Description'])
+                            st.write("---")
 
                     with col3:
                         st.subheader("🎮 Games 🎮")
                         for game in results.get("games", []):
-                            st.write(f"- {game['title']}")
+                            st.markdown(f"**{game['Title']}**")
+                            with st.expander(f"View Description"):
+                                st.caption(game['Description'])
+                            st.write("---")
 
                 else:
                     st.error(f"Backend Error: {response.status_code}")
