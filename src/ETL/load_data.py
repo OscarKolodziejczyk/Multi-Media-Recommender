@@ -17,7 +17,7 @@ def load_data_to_postgres(cleaned_dfs):
     db_name = os.getenv("DB_NAME")
 
     # Construct database URL with our credentials
-    db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+    db_url = f"postgresql://{db_user}:{db_password}@{db_host}/{db_name}?sslmode=require&channel_binding=require"
 
     # Create SQL Engine
     engine = create_engine(db_url)

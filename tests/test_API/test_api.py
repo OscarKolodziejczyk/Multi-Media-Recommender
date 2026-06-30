@@ -9,7 +9,7 @@ def test_read_root():
     """
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"Status": "FastAPI server live"}
+    assert response.json() == {"Status": "Multi Media Recommendation Engine Live"}
 
 def test_valid_recommendation():
     """

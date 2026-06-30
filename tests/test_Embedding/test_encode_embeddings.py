@@ -26,11 +26,11 @@ def test_generate_vectors_logic(mock_SentenceTransformer):
 
     # Resulting DF assertions
     assert result_df is not None
-    assert 'Embedding' in result_df.columns
+    assert 'embedding' in result_df.columns
     assert result_df['Title'].iloc[0] == "The Matrix"
     assert result_df['Description'].iloc[0] == "Simulation action movie."
     assert result_df['DataType'].iloc[0] == "Movie"
-    assert result_df['Embedding'].iloc[0] == fake_embeddings.tolist()[0]
+    assert result_df['embedding'].iloc[0] == fake_embeddings.tolist()[0]
 
     # Check that our model was called once to encode our fake description
     mock_model.encode.assert_called_once_with(["Simulation action movie."])

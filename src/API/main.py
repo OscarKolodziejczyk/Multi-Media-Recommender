@@ -22,7 +22,28 @@ engine = create_engine(db_url)
 
 @app.get("/")
 def read_root():
-    return {"Status": "FastAPI server live"}
+    return {"Status": "Multi Media Recommendation Engine Live"}
+
+@app.get("/titles")
+async def get_titles():
+    """Retrieves all available media titles"""
+    # Open connection to PostgreSQL
+    try:
+        with engine.connect() as conn:
+
+            query = text("""
+            SELECT title FROM movies ORDER BY title ASC
+            UNION ALL
+            SELECT title FROM books ORDER BY title ASC
+            UNION ALL
+            SELECT title FROM games ORDER BY title ASC
+            """)
+            result = conn.execute(query)
+        titles = [row[0] for row in result]
+        return {"titles": titles}
+    except Exception as e:
+        return {"error": str(e)}
+
 
 @app.get("/recommend/{title}")
 def get_recommendations(title: str):
