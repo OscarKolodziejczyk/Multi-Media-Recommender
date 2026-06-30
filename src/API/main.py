@@ -32,14 +32,15 @@ async def get_titles():
         with engine.connect() as conn:
 
             query = text("""
-            SELECT title FROM movies ORDER BY title ASC
+            SELECT "Title", "DataType" FROM movies
             UNION ALL
-            SELECT title FROM books ORDER BY title ASC
+            SELECT "Title", "DataType" FROM books
             UNION ALL
-            SELECT title FROM games ORDER BY title ASC
+            SELECT "Title", "DataType" FROM games
+            ORDER BY "Title" ASC
             """)
             result = conn.execute(query)
-        titles = [row[0] for row in result]
+        titles = [f"{row.Title} ({row.DataType})" for row in result]
         return {"titles": titles}
     except Exception as e:
         return {"error": str(e)}
@@ -96,16 +97,27 @@ def get_recommendations(title: str):
             if not result or result[0].cosine_distance is None:
                 raise HTTPException(status_code=404, detail=f"Title {title} not found")
 
-            recommendations = []
-            for row in result:
-                recommendations.append({
-                    "Title": row.Title,
-                    "Description": row.Description,
-                    "DataType": row.DataType,
-                    "Match Score": round(float(row.cosine_distance), 3),
-                })
+            movies = []
+            books = []
+            games = []
 
-            return {"searched_title": title, "recommendations": recommendations}
+            def list_append_helper(media_list, media_row):
+                media_list.append({
+                        "Title": media_row.Title,
+                        "Description": media_row.Description,
+                        "DataType": media_row.DataType,
+                        "Match Score": round(float(media_row.cosine_distance), 3),
+                    })
+
+            for row in result:
+                if row.DataType == "Movie":
+                    list_append_helper(movies, row)
+                elif row.DataType == "Book":
+                    list_append_helper(books, row)
+                elif row.DataType == "Game":
+                    list_append_helper(games, row)
+
+            return {"searched_title": title, "movies": movies, "books": books, "games": games}
     except HTTPException:
         raise
     except Exception as e:
