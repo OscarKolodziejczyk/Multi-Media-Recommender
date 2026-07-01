@@ -1,3 +1,7 @@
+import pandas as pd
+import re
+
+
 def clean_data(dfs):
     """
     Takes dfs (dictionary of raw data, and cleans it to only include necessary
@@ -19,6 +23,7 @@ def clean_data(dfs):
         df_books.drop_duplicates(subset=['description'], inplace=True)
         df_books.insert(2, 'DataType', "Book")
         df_books.rename(columns={'title': 'Title', 'description': 'Description'}, inplace=True)
+        df_books['Description'] = df_books['Description'].str.replace(r'\s+', ' ', regex=True).str.strip()
         cleaned_dfs['books'] = df_books
     else:
         print("Error, raw_books.csv does not exist")
@@ -29,6 +34,7 @@ def clean_data(dfs):
         df_movies.drop_duplicates(subset=['Overview'], inplace=True)
         df_movies.insert(2, 'DataType', "Movie")
         df_movies.rename(columns={'Series_Title': 'Title', 'Overview': 'Description'}, inplace=True)
+        df_movies['Description'] = df_movies['Description'].str.replace(r'\s+', ' ', regex=True).str.strip()
         cleaned_dfs['movies'] = df_movies
     else:
         print("Error, raw_movies.csv does not exist")
@@ -39,6 +45,7 @@ def clean_data(dfs):
         df_games.drop_duplicates(subset=['Summary'], inplace=True)
         df_games.insert(2, 'DataType', "Game")
         df_games.rename(columns={'Summary': 'Description'}, inplace=True)
+        df_games['Description'] = df_games['Description'].str.replace(r'\s+', ' ', regex=True).str.strip()
         cleaned_dfs['games'] = df_games
     else:
         print("Error, raw_games.csv does not exist")
