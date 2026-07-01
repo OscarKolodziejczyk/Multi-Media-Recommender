@@ -22,8 +22,12 @@ def test_valid_recommendation():
     data = response.json()
 
     assert data["searched_title"] == "The Matrix"
-    assert "recommendations" in data
-    assert len(data["recommendations"]) == 15
+    assert "movies" in data
+    assert "books" in data
+    assert "games" in data
+    assert len(data["movies"]) == 5
+    assert len(data["books"]) == 5
+    assert len(data["games"]) == 5
 
 def test_invalid_recommendation():
     """
