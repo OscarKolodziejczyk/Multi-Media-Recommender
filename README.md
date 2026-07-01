@@ -69,16 +69,21 @@ arrays as native PostgreSQL vector data types.
 
 * Implemented SQLAlchemy parameterization (using the text() function) to securely prevent SQL injections.
 
-## Part 4: Serverless Cloud Deployment (In Progress)
+## Part 4: Distributed Cloud Deployment
 
-* Containerizing the FastAPI application with a Dockerfile.
+* Architected and deployed a decoupled system consisting of an independent FastAPI
+backend and a Streamlit frontend, containerized via Docker and hosted on Azure Container Apps.
 
-* Deploying the container to Azure Container Apps to host the API live on the
-public internet.
+* Configured Azure Container Apps for high-availability, serverless execution, 
+leveraging managed environment variables.
+
+* Production Deployment Workflow: Engineered a professional CI/CD-ready deployment
+workflow, utilizing automated Docker image tagging, multi-stage building, and 
+cloud-native environment configuration to ensure environment parity between local development and production.
 
 ## Local Setup & Installation
 
-If you wish to run this repository locally, follow these steps:
+If you wish to run the ETL & Embedding pipelines locally, follow these steps:
 
 1. Clone the Repository
 ```Bash
@@ -122,12 +127,12 @@ sentence-transformers pgvector python-dotenv pytest
    Run the independent pipelines in order to populate your database with semantic math:
 
 ```Bash
-# 1. Pull data from Azure and load into Postgres
-python ETL/extract_data.py  
-
-# 2. Generate AI vectors and update database rows
-python Embedding/embedding_pipeline.py 
-
-# 3. Run the isolated test suite
+# 1. Run the isolated test suite
 pytest
+ 
+# 2. Pull data from Azure and load into Postgres
+python src/ETL/extract_data.py  
+
+# 3. Generate AI vectors and update database rows (this will take several minutes)
+python src/Embedding/embedding_pipeline.py 
 ```
