@@ -22,7 +22,7 @@ def fetch_titles():
 available_titles = fetch_titles()
 
 st.title("Cross Media Recommendation Engine")
-st.markdown("[GitHub Link](https://github.com/OscarKolodziejczyk/Multi-Media-Recommender) | Powered by PostgreSQL, Docker, StreamLit, & FastAPI")
+st.markdown("[GitHub Link](https://github.com/OscarKolodziejczyk/Multi-Media-Recommender) | Powered by Azure, Neon (PostgreSQL), Docker, StreamLit, & FastAPI")
 st.markdown("\- By Oscar Kolodziejczyk")
 st.divider()
 
@@ -30,7 +30,7 @@ user_query = st.selectbox(
     "Choose a movie to get recommendations for:",
     options=available_titles,
     index=None,
-    placeholder="Select a movie..."
+    placeholder="Select a title..."
 )
 
 if st.button("Get Recommendations"):
