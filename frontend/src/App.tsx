@@ -1,122 +1,86 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import {useState} from 'react';
+import './App.css';
+
+
+// Create a Recommendation blueprint
+interface Recommendation {
+    id: number;
+    title:string;
+    category: 'Movie' | 'Book' | 'Game';
+    description: string;
+    }
+
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    // First we set state variables
 
-      <div className="ticks"></div>
+    const [availableTitles, setAvailableTitles] = useState<string[]>(["The Matrix", "Inception", "Interstellar", "Dune"]);
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+    const [selectedTitle, setSelectedTitle] = useState<string>("");
+    const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+    const handleSearch = () => {
+        if (!selectedTitle) {
+            alert("Please select a title first!");
+            return;
+            }
+
+
+        setIsLoading(true);
+
+        setTimeout(() => {
+            setRecommendations([
+                { id: 1, title: "Neuromancer", category: "Book", description: "A classic cyberpunk novel." },
+                { id: 2, title: "Cyberpunk 2077", category: "Game", description: "An open-world RPG." },
+                { id: 3, title: "Blade Runner", category: "Movie", description: "A neo-noir sci-fi film." }
+            ]);
+            setIsLoading(false);
+            }, 1000);
+    };
+
+    return (
+        <div className="app-container">
+            <header className="header">
+                <h1>Cross-Media Semantic Engine</h1>
+                <p>Find visually and thematically similar Movies, Books, and Games.</p>
+            </header>
+
+            {/* Buttons and Interactive Tools*/}
+            <div className="controls">
+                <select
+                    className="title-dropdown"
+                    value={selectedTitle}
+                    onChange={(e) => setSelectedTitle(e.target.value)}
+                >
+                    <option value="">-- Select a Movie --</option>
+                    {availableTitles.map((title, index) => (
+                        <option key={index} value={title}>{title}</option>
+                        ))}
+                </select>
+
+                <button
+                    className="search-button"
+                    onClick={handleSearch}
+                    disabled={isLoading}
+                >
+                    {isLoading ? "Searching..." : "Get Recommendations"}
+                </button>
+            </div>
+
+            {/* Resulting Recommendations Area */}
+            <div className="results-grid">
+                {recommendations.map((rec) => (
+                    <div key={rec.id} className="card">
+                        <span className={'badge ${rec.category.toLowerCase()}'}>{rec.category}</span>
+                        <h3>{rec.title}</h3>
+                        <p>{rec.description}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+    }
 
 export default App
