@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 8000
 
 # cmd that starts the server once the container is launched
-CMD ["uvicorn", "src.API.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "backend.API.main:app", "--host", "0.0.0.0", "--port", "8000"]
