@@ -1,43 +1,87 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import './App.css';
 
 
-// Create a Recommendation blueprint
-interface Recommendation {
-    id: number;
-    title:string;
-    category: 'Movie' | 'Book' | 'Game';
-    description: string;
+// Create interfaces for our API responses:
+
+interface MediaItem {
+    Title: string;
+    Description: string;
+    DataType: string;
+    "Match Score": number;
+    }
+
+interface RecommendationResponse {
+    searched_title: string;
+    movies: MediaItem[];
+    books: MediaItem[];
+    games: MediaItem[];
     }
 
 
 function App() {
+    const API_BASE_URL = "https://multi-media-recommender-app.nicecoast-7eaef372.canadacentral.azurecontainerapps.io";
 
-    // First we set state variables
+    // Set state variables
 
-    const [availableTitles, setAvailableTitles] = useState<string[]>(["The Matrix", "Inception", "Interstellar", "Dune"]);
-
+    const [availableTitles, setAvailableTitles] = useState<string[]>([]);
     const [selectedTitle, setSelectedTitle] = useState<string>("");
-    const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+    const [recommendations, setRecommendations] = useState<MediaItem[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
 
-    const handleSearch = () => {
+    // Fetch all titles:
+    useEffect(() => {
+        const fetchTitles = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/titles`);
+
+                if (!response.ok) throw new Error("Failed to fetch titles");
+
+                const data = await response.json();
+                setAvailableTitles(data.titles); // TODO: could have to be changed b/c data is expecting a certain response, idk what it is for sure
+                } catch (err) {
+                    console.error("Error fetching titles:", err);
+                    setError("Could not load titles from backend.");
+                    }
+            };
+
+            fetchTitles();
+        }, []); // Empty array here ensures this only runs once (why?)
+
+    // Actual search for recommednations:
+
+    const handleSearch = async () => {
         if (!selectedTitle) {
             alert("Please select a title first!");
             return;
             }
-
+        try {
 
         setIsLoading(true);
+        setError("");
+        setRecommendations([]);
 
-        setTimeout(() => {
-            setRecommendations([
-                { id: 1, title: "Neuromancer", category: "Book", description: "A classic cyberpunk novel." },
-                { id: 2, title: "Cyberpunk 2077", category: "Game", description: "An open-world RPG." },
-                { id: 3, title: "Blade Runner", category: "Movie", description: "A neo-noir sci-fi film." }
-            ]);
+        // Clean titles: get rid of media type at the end
+        let cleanTitle = selectedTitle.slice(0, -7);
+        if (cleanTitle.endsWith(" ")) {
+            cleanTitle = cleanTitle.slice(0, -1);
+        }
+
+        const response = await fetch(`${API_BASE_URL}/recommend/${encodeURIComponent(cleanTitle)}`);
+        if (!response.ok) throw new Error("Failed to fetch recommendations");
+
+        const data: RecommendationResponse = await response.json();
+
+        const combinedResults = [...data.movies, ...data.books, ...data.games];
+        setRecommendations(combinedResults);
+
+    } catch (err) {
+        console.error("Search error:", err);
+        setError("Failed to fetch recommendations. Check network console");
+        } finally {
             setIsLoading(false);
-            }, 1000);
+        }
     };
 
     return (
@@ -63,17 +107,23 @@ function App() {
                 <button
                     className="search-button"
                     onClick={handleSearch}
-                    disabled={isLoading}
+                    disabled={isLoading || availableTitles.length == 0}
                 >
                     {isLoading ? "Searching..." : "Get Recommendations"}
                 </button>
             </div>
 
+            {/* Error Message Display*/}
+            {error && <div style={{ color: 'red', textAlign: 'center', marginBottom: '1rem' }}>{error}</div>}
+
             {/* Resulting Recommendations Area */}
             <div className="results-grid">
-                {recommendations.map((rec) => (
-                    <div key={rec.id} className="card">
-                        <span className={'badge ${rec.category.toLowerCase()}'}>{rec.category}</span>
+                {recommendations.map((rec, index) => (
+                    <div key={index} className="card">
+                        <span className={'badge ${rec.DataType.toLowerCase()}'}>{rec.DataType}</span>
+                        <span style ={{ float: 'right', fontSize: '0.8rem', color: '#666', fontWeight: 'bold'}}>
+                            Score: {rec['Match Score']}
+                        </span>
                         <h3>{rec.title}</h3>
                         <p>{rec.description}</p>
                     </div>
