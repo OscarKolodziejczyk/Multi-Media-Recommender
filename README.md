@@ -17,7 +17,7 @@ generation, and API deployment.
 
 Cloud Storage / Data Lake: Azure Blob Storage
 
-Database: PostgreSQL (Containerized via Docker)
+Database: PostgreSQL
 
 Vector Engine: pgvector extension for native SQL math operations
 
@@ -25,9 +25,11 @@ Machine Learning: Hugging Face `all-MiniLM-L6-v2` (Local Execution)
 
 Data Processing Pipeline: Python, Pandas, SQLAlchemy
 
-Backend API: FastAPI (In Progress)
+Backend API: FastAPI
 
-Cloud Deployment: Docker & Azure Container Apps (In Progress)
+Cloud Deployment: Docker & Azure Container Apps
+
+Frontend & UI: React & TypeScript
 
 Unit Testing: pytest and unittest.mock
 
@@ -80,6 +82,10 @@ leveraging managed environment variables.
 * Production Deployment Workflow: Engineered a professional CI/CD-ready deployment
 workflow, utilizing automated Docker image tagging, multi-stage building, and 
 cloud-native environment configuration to ensure environment parity between local development and production.
+
+## Part 5: Custom Frontend
+
+* Built the frontend using TypeScript and React for a user-friendly and easy-to-use interface.
 
 ## Local Setup & Installation
 
