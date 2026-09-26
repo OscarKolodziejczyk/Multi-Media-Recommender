@@ -1,90 +1,324 @@
-/* Base Layout */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+/* Scoped to .app-container so this component's palette never overrides
+   the host site's shared theme tokens (--bg, --text, --border, --accent
+   etc. in index.css, which auto-switch with prefers-color-scheme). This
+   component always renders in its own dark theme regardless of the
+   site's light/dark mode. */
 .app-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-family: system-ui, -apple-system, sans-serif;
-  color: #333;
+  --app-bg: #0e1117;
+  --app-surface: #262730;
+  --app-surface-2: #31323c;
+  --app-border: rgba(250, 250, 250, 0.15);
+  --app-text: #fafafa;
+  --app-text-muted: #9a9ea8;
+  --app-accent: #7dd3fc;
+
+  --app-movies: #e2685f;
+  --app-books: #d9a54a;
+  --app-games: #8b7cf0;
 }
+
+.app-container,
+.app-container *,
+.app-container *::before,
+.app-container *::after {
+  box-sizing: border-box;
+}
+
+.app-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--app-text);
+  background: var(--app-bg);
+  text-align: left;
+  letter-spacing: normal;
+  border-radius: 12px;
+}
+
+/* Header */
 
 .header {
   text-align: center;
-  margin-bottom: 3rem;
 }
 
 .header h1 {
-  font-size: 2.5rem;
-  color: #1a1a2e;
-  margin-bottom: 0.5rem;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--app-text);
 }
 
-/* Controls (Dropdown and Button) */
+.accent-strip {
+  display: flex;
+  gap: 4px;
+  width: 160px;
+  height: 4px;
+  margin: 0.9rem auto 1.4rem;
+}
+
+.accent-strip span {
+  flex: 1;
+  border-radius: 2px;
+}
+
+.header-meta {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+  color: var(--app-text-muted);
+}
+
+.header-meta a {
+  color: var(--app-accent);
+  text-decoration: none;
+}
+
+.header-meta a:hover,
+.header-meta a:focus-visible {
+  text-decoration: underline;
+}
+
+.header-meta .dot {
+  margin: 0 0.5rem;
+  color: var(--app-border);
+}
+
+.byline {
+  margin: 0 0 1.75rem;
+  font-size: 0.9rem;
+  color: var(--app-text-muted);
+}
+
+/* Controls */
+
 .controls {
   display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 3rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--app-border);
+  margin-bottom: 2.5rem;
 }
 
-.title-dropdown {
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  min-width: 300px;
+.dropdown {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+}
+
+.dropdown-trigger {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  text-align: left;
+  color: var(--app-text);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
+  cursor: text;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%239a9ea8' stroke-width='1.5' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+}
+
+.dropdown-trigger::placeholder {
+  color: var(--app-text-muted);
+}
+
+.dropdown-trigger:focus-visible {
+  outline: none;
+  border-color: rgba(250, 250, 250, 0.4);
+  box-shadow: 0 0 0 3px rgba(250, 250, 250, 0.12);
+}
+
+.dropdown-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  max-height: 280px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
+  z-index: 20;
+}
+
+.dropdown-option {
+  padding: 0.55rem 0.75rem;
+  border-radius: 9px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.dropdown-option:hover,
+.dropdown-option.selected {
+  background: var(--app-surface-2);
+  color: var(--app-text);
+}
+
+.dropdown-empty {
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+  color: var(--app-text-muted);
 }
 
 .search-button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background-color: #0f3460;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  padding: 0.7rem 1.4rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--app-text);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s;
+  transition: background-color 0.15s ease;
 }
 
-.search-button:hover {
-  background-color: #1a1a2e;
+.search-button:hover:not(:disabled) {
+  background: var(--app-surface-2);
+}
+
+.search-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(250, 250, 250, 0.15);
 }
 
 .search-button:disabled {
-  background-color: #a0a0a0;
+  background: var(--app-surface);
+  color: var(--app-text-muted);
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Results Grid */
-.results-grid {
+/* Error */
+
+.error-message {
+  color: var(--app-movies);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+/* Results columns */
+
+.columns-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
 }
 
-/* Individual Cards */
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: normal;
+  margin: 0 0 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid;
+}
+
+.column-icon {
+  font-size: 1.1rem;
+}
+
+.empty-state {
+  color: var(--app-text-muted);
+  font-size: 0.9rem;
+}
+
+.card-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .card {
-  background: #f9f9f9;
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  background: var(--app-bg);
+  border: 1px solid var(--app-border);
+  border-radius: 16px;
+  padding: 0.9rem 1rem;
 }
 
-.card h3 {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+.card-title {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
-.badge {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: white;
+.card-details summary {
+  list-style: none;
+  cursor: pointer;
+  font-size: 0.82rem;
+  color: var(--app-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
-.movie { background-color: #e94560; }
-.book { background-color: #0f3460; }
-.game { background-color: #16213e; }
+.card-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.card-details summary::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 4px solid var(--app-text-muted);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transition: transform 0.15s ease;
+}
+
+.card-details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.card-details summary:hover,
+.card-details summary:focus-visible {
+  color: var(--app-text);
+}
+
+.card-description {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--app-text-muted);
+}
+
+/* Responsive */
+
+@media (max-width: 760px) {
+  .columns-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-button,
+  .card-details summary::before {
+    transition: none;
+  }
+}
